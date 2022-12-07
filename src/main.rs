@@ -1,4 +1,5 @@
 mod day1;
+mod day2;
 
 use std::env;
 
@@ -10,6 +11,7 @@ fn main() {
 
     match day {
 	1 => day1::resolve(part),
+	2 => day2::resolve(part),
 	_ => (),
     }
 }
