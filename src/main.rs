@@ -1,5 +1,8 @@
+#![feature(iter_array_chunks)]
+
 mod day1;
 mod day2;
+mod day3;
 
 use std::env;
 
@@ -12,6 +15,7 @@ fn main() {
     match day {
 	1 => day1::resolve(part),
 	2 => day2::resolve(part),
+	3 => day3::resolve(part),
 	_ => (),
     }
 }
