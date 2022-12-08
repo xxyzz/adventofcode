@@ -1,7 +1,7 @@
 import io
 import unittest
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, TextIO
 
 
 @dataclass
@@ -16,7 +16,7 @@ class Dir:
     contents: list[Any]
 
 
-def create_fs_tree(f: io.TextIOBase) -> Dir:
+def create_fs_tree(f: TextIO) -> Dir:
     pwd: list[Dir] = []
     for line in f:
         output = line.strip().split()
