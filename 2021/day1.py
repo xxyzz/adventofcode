@@ -16,8 +16,8 @@ def part_two(input_text: str | None = None) -> int:
         result = 0
         values = [int(line) for line in f]
         for i in range(len(values) - 3):
-            first_window = values[i:i+3]
-            second_window = values[i+1:i+4]
+            first_window = values[i : i + 3]
+            second_window = values[i + 1 : i + 4]
             if sum(second_window) > sum(first_window):
                 result += 1
         return result
