@@ -5,6 +5,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 
 use std::env;
 
@@ -20,6 +21,7 @@ fn main() {
 	3 => day3::resolve(part),
 	4 => day4::resolve(part),
 	5 => day5::resolve(part),
+	6 => day6::resolve(part),
 	_ => (),
     }
 }
