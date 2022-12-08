@@ -10,8 +10,7 @@ pub fn resolve(part: u32) {
     }
 }
 
-#[derive(PartialEq)]
-#[derive(Debug)]
+#[derive(PartialEq, Debug)]
 struct Range {
     start: u32,
     end: u32,
@@ -61,11 +60,7 @@ fn overlap_pairs(text: String) -> u32 {
     for line in text.lines() {
         let (range1, range2) = parse_range(line);
 
-        if (range1.start >= range2.start && range1.start <= range2.end)
-            || (range1.end >= range2.start && range1.end <= range2.end)
-            || (range2.start >= range1.start && range2.start <= range1.end)
-            || (range2.end >= range1.start && range2.end <= range1.end)
-        {
+        if range1.start <= range2.end && range2.start <= range1.end {
             pairs += 1;
         }
     }
