@@ -2,6 +2,7 @@ import io
 import unittest
 from dataclasses import dataclass
 from typing import Any, TextIO
+from collections import deque
 
 
 @dataclass
@@ -17,7 +18,7 @@ class Dir:
 
 
 def create_fs_tree(f: TextIO) -> Dir:
-    pwd: list[Dir] = []
+    pwd: deque[Dir] = deque()
     for line in f:
         output = line.strip().split()
         if not output:
