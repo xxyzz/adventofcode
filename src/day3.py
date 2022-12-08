@@ -1,5 +1,5 @@
-import sys
 import itertools
+import sys
 
 
 def main() -> None:

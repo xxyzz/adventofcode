@@ -1,5 +1,5 @@
-import sys
 import heapq
+import sys
 
 
 def main() -> None:
