@@ -1,17 +1,7 @@
 use std::collections::HashSet;
 use std::fs;
 
-pub fn resolve(part: u32) {
-    let lines = fs::read_to_string("src/day8_input").expect("Can't read file");
-
-    match part {
-        1 => println!("{}", part_one(lines)),
-        2 => println!("{}", part_two(lines)),
-        _ => (),
-    }
-}
-
-fn part_one(text: String) -> usize {
+fn part_one(text: &str) -> usize {
     let trees = scan_trees(text);
     let mut visible_trees: HashSet<(usize, usize)> = HashSet::new();
     let row_num = trees.len();
@@ -92,7 +82,7 @@ enum Direction {
     Right,
 }
 
-fn part_two(text: String) -> usize {
+fn part_two(text: &str) -> usize {
     let trees = scan_trees(text);
     let row_num = trees.len();
     let column_num = trees[0].len();
@@ -133,20 +123,20 @@ fn visable_trees(trees: &Vec<Vec<usize>>, row: usize, col: usize, direction: Dir
         }
         match direction {
             Direction::Up => {
-		if row_index == 0 {
-		    break;
-		} else {
-		    row_index -= 1;
-		}
-	    },
+                if row_index == 0 {
+                    break;
+                } else {
+                    row_index -= 1;
+                }
+            }
             Direction::Down => row_index += 1,
             Direction::Left => {
-		if col_index == 0 {
-		    break;
-		} else {
-		    col_index -= 1;
-		}
-	    },
+                if col_index == 0 {
+                    break;
+                } else {
+                    col_index -= 1;
+                }
+            }
             Direction::Right => col_index += 1,
         }
     }
@@ -154,7 +144,7 @@ fn visable_trees(trees: &Vec<Vec<usize>>, row: usize, col: usize, direction: Dir
     visable_tree_num
 }
 
-fn scan_trees(text: String) -> Vec<Vec<usize>> {
+fn scan_trees(text: &str) -> Vec<Vec<usize>> {
     text.lines()
         .map(|line| {
             line.chars()
@@ -170,13 +160,19 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let test_input = fs::read_to_string("src/day8_test_input").expect("Can't read file");
-        assert_eq!(part_one(test_input), 21);
+        let test_input = fs::read_to_string("input/day8_test_input").expect("Can't read file");
+        assert_eq!(part_one(&test_input), 21);
     }
 
     #[test]
     fn test_part_two() {
-        let test_input = fs::read_to_string("src/day8_test_input").expect("Can't read file");
-        assert_eq!(part_two(test_input), 8);
+        let test_input = fs::read_to_string("input/day8_test_input").expect("Can't read file");
+        assert_eq!(part_two(&test_input), 8);
     }
+}
+
+fn main() {
+    let lines = fs::read_to_string("input/day8_input").expect("Can't read file");
+    println!("{}", part_one(&lines));
+    println!("{}", part_two(&lines));
 }

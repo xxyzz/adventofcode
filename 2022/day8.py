@@ -3,7 +3,7 @@ from typing import TextIO
 
 
 def part_one(path: str | None = None) -> int:
-    with open(path if path else "src/day8_input") as f:
+    with open(path if path else "input/day8_input") as f:
         trees = scan_trees(f)
         visible_trees = 0
         row_num = len(trees)
@@ -49,7 +49,7 @@ def scan_trees(f: TextIO) -> list[list[int]]:
 
 
 def part_two(path: str | None = None) -> int:
-    with open(path if path else "src/day8_input") as f:
+    with open(path if path else "input/day8_input") as f:
         trees = scan_trees(f)
         max_scenic = 0
         row_num = len(trees)
@@ -96,10 +96,10 @@ def part_two(path: str | None = None) -> int:
 
 class Test(unittest.TestCase):
     def test_part_one(self):
-        self.assertEqual(part_one("src/day8_test_input"), 21)
+        self.assertEqual(part_one("input/day8_test_input"), 21)
 
     def test_part_two(self):
-        self.assertEqual(part_two("src/day8_test_input"), 8)
+        self.assertEqual(part_two("input/day8_test_input"), 8)
 
 
 if __name__ == "__main__":

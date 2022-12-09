@@ -1,16 +1,6 @@
 use std::fs;
 
-pub fn resolve(part: u32) {
-    let lines = fs::read_to_string("src/day5_input").expect("Can't read file");
-
-    match part {
-        1 => println!("{}", part_one_stack_top(lines)),
-        2 => println!("{}", part_two_stack_top(lines)),
-        _ => (),
-    }
-}
-
-fn crate_mover(text: String, move_at_once: bool) -> String {
+fn crate_mover(text: &str, move_at_once: bool) -> String {
     let mut stacks: Vec<Vec<char>> = vec![];
     let mut stack_nums = 0;
     let mut parsing_stack = true;
@@ -63,11 +53,11 @@ fn crate_mover(text: String, move_at_once: bool) -> String {
     top
 }
 
-fn part_one_stack_top(text: String) -> String {
+fn part_one(text: &str) -> String {
     crate_mover(text, false)
 }
 
-fn part_two_stack_top(text: String) -> String {
+fn part_two(text: &str) -> String {
     crate_mover(text, true)
 }
 
@@ -78,12 +68,18 @@ mod tests {
     const TEST_INPUT: &str = "    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2";
 
     #[test]
-    fn part_one() {
-        assert_eq!(part_one_stack_top(String::from(TEST_INPUT)), "CMZ");
+    fn test_part_one() {
+        assert_eq!(part_one(TEST_INPUT), "CMZ");
     }
 
     #[test]
-    fn part_two() {
-        assert_eq!(part_two_stack_top(String::from(TEST_INPUT)), "MCD");
+    fn test_part_two() {
+        assert_eq!(part_two(TEST_INPUT), "MCD");
     }
+}
+
+fn main() {
+    let lines = fs::read_to_string("input/day5_input").expect("Can't read file");
+    println!("{}", part_one(&lines));
+    println!("{}", part_two(&lines));
 }

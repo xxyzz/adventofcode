@@ -1,15 +1,5 @@
 use std::fs;
 
-pub fn resolve(part: u32) {
-    let lines = fs::read_to_string("src/day4_input").expect("Can't read file");
-
-    match part {
-        1 => println!("{}", fully_contain_pairs(lines)),
-        2 => println!("{}", overlap_pairs(lines)),
-        _ => (),
-    }
-}
-
 #[derive(PartialEq, Debug)]
 struct Range {
     start: u32,
@@ -38,7 +28,7 @@ fn parse_range(line: &str) -> (Range, Range) {
     )
 }
 
-fn fully_contain_pairs(text: String) -> u32 {
+fn part_one(text: &str) -> u32 {
     let mut pairs = 0;
 
     for line in text.lines() {
@@ -54,7 +44,7 @@ fn fully_contain_pairs(text: String) -> u32 {
     pairs
 }
 
-fn overlap_pairs(text: String) -> u32 {
+fn part_two(text: &str) -> u32 {
     let mut pairs = 0;
 
     for line in text.lines() {
@@ -83,12 +73,18 @@ mod tests {
     }
 
     #[test]
-    fn part_one() {
-        assert_eq!(fully_contain_pairs(String::from(TEST_INPUT)), 2);
+    fn test_part_one() {
+        assert_eq!(part_one(TEST_INPUT), 2);
     }
 
     #[test]
-    fn part_two() {
-        assert_eq!(overlap_pairs(String::from(TEST_INPUT)), 4);
+    fn test_part_two() {
+        assert_eq!(part_two(TEST_INPUT), 4);
     }
+}
+
+fn main() {
+    let lines = fs::read_to_string("input/day4_input").expect("Can't read file");
+    println!("{}", part_one(&lines));
+    println!("{}", part_two(&lines));
 }

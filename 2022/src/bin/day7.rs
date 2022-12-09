@@ -1,17 +1,7 @@
 use std::collections::HashMap;
 use std::fs;
 
-pub fn resolve(part: u32) {
-    let lines = fs::read_to_string("src/day7_input").expect("Can't read file");
-
-    match part {
-        1 => println!("{}", part_one(lines)),
-        2 => println!("{}", part_two(lines)),
-        _ => (),
-    }
-}
-
-fn add_file_sizes(text: String) -> Vec<u32> {
+fn add_file_sizes(text: &str) -> Vec<u32> {
     let mut pwd: Vec<&str> = vec![];
     let mut dir_sizes: HashMap<String, u32> = HashMap::new();
 
@@ -53,12 +43,12 @@ fn add_file_sizes(text: String) -> Vec<u32> {
     dir_sizes.into_values().collect()
 }
 
-fn part_one(text: String) -> u32 {
+fn part_one(text: &str) -> u32 {
     let dir_sizes = add_file_sizes(text);
     dir_sizes.iter().filter(|v| **v <= 100000).sum()
 }
 
-fn part_two(text: String) -> u32 {
+fn part_two(text: &str) -> u32 {
     let mut dir_sizes = add_file_sizes(text);
     dir_sizes.sort();
     let total_disk_size = 70000000;
@@ -78,13 +68,19 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let test_input = fs::read_to_string("src/day7_test_input").expect("Can't read file");
-        assert_eq!(part_one(test_input), 95437);
+        let test_input = fs::read_to_string("input/day7_test_input").expect("Can't read file");
+        assert_eq!(part_one(&test_input), 95437);
     }
 
     #[test]
     fn test_part_two() {
-        let test_input = fs::read_to_string("src/day7_test_input").expect("Can't read file");
-        assert_eq!(part_two(test_input), 24933642);
+        let test_input = fs::read_to_string("input/day7_test_input").expect("Can't read file");
+        assert_eq!(part_two(&test_input), 24933642);
     }
+}
+
+fn main() {
+    let lines = fs::read_to_string("input/day7_input").expect("Can't read file");
+    println!("{}", part_one(&lines));
+    println!("{}", part_two(&lines));
 }

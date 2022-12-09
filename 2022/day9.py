@@ -5,9 +5,9 @@ def part_one(path: str | None = None) -> int:
     visited_spots = {(0, 0)}
     head = [0, 0]
     tail = [0, 0]
-    with open(path if path else "src/day9_input") as f:
+    with open(path if path else "input/day9_input") as f:
         for line in f:
-            direction, steps_str = line.strip().split()
+            direction, steps_str = line.split()
             steps = int(steps_str)
 
             for _ in range(steps):
@@ -31,7 +31,7 @@ def part_two(path: str | None = None) -> int:
     visited_spots = {(0, 0)}
     head = [0, 0]
     tails = [[0, 0] for _ in range(9)]
-    with open(path if path else "src/day9_input") as f:
+    with open(path if path else "input/day9_input") as f:
         for line in f:
             direction, steps_str = line.strip().split()
             steps = int(steps_str)
@@ -91,13 +91,13 @@ def near_spots(loc: list[int]) -> list[list[int]]:
 
 class Test(unittest.TestCase):
     def test_part_one(self):
-        self.assertEqual(part_one("src/day9_test_input"), 13)
+        self.assertEqual(part_one("input/day9_test_input"), 13)
 
     def test_part_two(self):
-        self.assertEqual(part_two("src/day9_test_input"), 1)
+        self.assertEqual(part_two("input/day9_test_input"), 1)
 
     def test_part_two_two(self):
-        self.assertEqual(part_two("src/day9_test_two_input"), 36)
+        self.assertEqual(part_two("input/day9_test_two_input"), 36)
 
 
 if __name__ == "__main__":

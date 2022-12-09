@@ -1,17 +1,8 @@
+#![feature(iter_array_chunks)]
 use std::collections::HashSet;
 use std::fs;
 
-pub fn resolve(part: u32) {
-    let lines = fs::read_to_string("src/day3_input").expect("Can't read file");
-
-    match part {
-        1 => println!("{}", part_one_priorities(lines)),
-        2 => println!("{}", part_two_priorities(lines)),
-        _ => (),
-    }
-}
-
-fn part_one_priorities(text: String) -> u32 {
+fn part_one(text: &str) -> u32 {
     let mut priorities = 0;
 
     for line in text.lines() {
@@ -36,10 +27,11 @@ fn part_one_priorities(text: String) -> u32 {
     priorities
 }
 
-fn part_two_priorities(text: String) -> u32 {
+fn part_two(text: &str) -> u32 {
     let mut priorities = 0;
 
-    for [line1, line2, line3] in text.lines().array_chunks() {  // nightly feature
+    // nightly feature
+    for [line1, line2, line3] in text.lines().array_chunks() {
         let pack1: HashSet<char> = HashSet::from_iter(line1.trim().chars());
         let pack2: HashSet<char> = HashSet::from_iter(line2.trim().chars());
         let pack3: HashSet<char> = HashSet::from_iter(line3.trim().chars());
@@ -65,12 +57,18 @@ mod tests {
     const TEST_INPUT: &str = "vJrwpWtwJgWrhcsFMMfFFhFp\njqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\nPmmdzqPrVvPwwTWBwg\nwMqvLMZHhHMvwLHjbvcjnnSBnvTQFn\nttgJtRGJQctTZtZT\nCrZsJsPPZsGzwwsLwLmpwMDw";
 
     #[test]
-    fn part_one() {
-        assert_eq!(part_one_priorities(String::from(TEST_INPUT)), 157);
+    fn test_part_one() {
+        assert_eq!(part_one(TEST_INPUT), 157);
     }
 
     #[test]
-    fn part_two() {
-        assert_eq!(part_two_priorities(String::from(TEST_INPUT)), 70);
+    fn test_part_two() {
+        assert_eq!(part_two(TEST_INPUT), 70);
     }
+}
+
+fn main() {
+    let lines = fs::read_to_string("input/day3_input").expect("Can't read file");
+    println!("{}", part_one(&lines));
+    println!("{}", part_two(&lines));
 }

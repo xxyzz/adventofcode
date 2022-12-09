@@ -57,7 +57,7 @@ def calculate_folder_size(folder: Dir, folder_sizes: list[int]) -> int:
 
 
 def part_one(path: str | None = None) -> int:
-    with open(path if path else "src/day7_input") as f:
+    with open(path if path else "input/day7_input") as f:
         root = create_fs_tree(f)
 
         folder_sizes: list[int] = []
@@ -66,7 +66,7 @@ def part_one(path: str | None = None) -> int:
 
 
 def part_two(path: str | None = None) -> int:
-    with open(path if path else "src/day7_input") as f:
+    with open(path if path else "input/day7_input") as f:
         root = create_fs_tree(f)
 
         folder_sizes: list[int] = []
@@ -83,11 +83,12 @@ def part_two(path: str | None = None) -> int:
 
 class Test(unittest.TestCase):
     def test_part_one(self):
-        self.assertEqual(part_one("src/day7_test_input"), 95437)
+        self.assertEqual(part_one("input/day7_test_input"), 95437)
 
     def test_part_two(self):
-        self.assertEqual(part_two("src/day7_test_input"), 24933642)
+        self.assertEqual(part_two("input/day7_test_input"), 24933642)
 
 
 if __name__ == "__main__":
+    print(part_one())
     print(part_two())

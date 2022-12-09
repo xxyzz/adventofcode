@@ -8,7 +8,7 @@ WorkRange = namedtuple("WorkRange", ["start", "end"])
 def main() -> None:
     overlap_pairs = 0
 
-    with open("src/day4_input") as f:
+    with open("input/day4_input") as f:
         for line in f:
             range1, range2 = line.strip().split(",")
             work_range1 = WorkRange(*[int(v) for v in range1.split("-")])

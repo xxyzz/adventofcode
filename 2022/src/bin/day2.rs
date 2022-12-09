@@ -1,16 +1,6 @@
 use std::fs;
 
-pub fn resolve(part: u32) {
-    let lines = fs::read_to_string("src/day2_input").expect("Can't read file");
-
-    match part {
-        1 => println!("{}", part_one_score(&lines)),
-        2 => println!("{}", part_two_score(&lines)),
-        _ => (),
-    }
-}
-
-fn part_one_score(text: &str) -> u32 {
+fn part_one(text: &str) -> u32 {
     let mut scores = 0;
 
     for line in text.lines() {
@@ -44,7 +34,7 @@ fn part_one_score(text: &str) -> u32 {
     scores
 }
 
-fn part_two_score(text: &str) -> u32 {
+fn part_two(text: &str) -> u32 {
     let mut scores = 0;
 
     for line in text.lines() {
@@ -52,32 +42,34 @@ fn part_two_score(text: &str) -> u32 {
         let opponent_choice = input_choices[0];
         let my_choice = input_choices[1];
 
-	let mut choice_score = 0;
-	match opponent_choice {
-	    "A" => choice_score = 1,
-	    "B" => choice_score = 2,
-	    "C" => choice_score = 3,
-	    _ => (),
-	}
+        let mut choice_score = 0;
+        match opponent_choice {
+            "A" => choice_score = 1,
+            "B" => choice_score = 2,
+            "C" => choice_score = 3,
+            _ => (),
+        }
 
-	match my_choice {
-	    "X" => {  // lose
-		choice_score -= 1;
-		if choice_score == 0 {
-		    choice_score = 3;
-		}
-	    }
-	    "Y" => scores += 3,  // draw
-	    "Z" => {  // win
-		choice_score += 1;
-		if choice_score == 4 {
-		    choice_score = 1;
-		}
-		scores += 6;
-	    }
-	    _ => (),
-	}
-	scores += choice_score;
+        match my_choice {
+            "X" => {
+                // lose
+                choice_score -= 1;
+                if choice_score == 0 {
+                    choice_score = 3;
+                }
+            }
+            "Y" => scores += 3, // draw
+            "Z" => {
+                // win
+                choice_score += 1;
+                if choice_score == 4 {
+                    choice_score = 1;
+                }
+                scores += 6;
+            }
+            _ => (),
+        }
+        scores += choice_score;
     }
 
     scores
@@ -90,12 +82,18 @@ mod tests {
     const TEST_INPUT: &str = "A Y\nB X\nC Z";
 
     #[test]
-    fn part_one() {
-        assert_eq!(part_one_score(TEST_INPUT), 15);
+    fn test_part_one() {
+        assert_eq!(part_one(TEST_INPUT), 15);
     }
 
     #[test]
-    fn part_two() {
-        assert_eq!(part_two_score(TEST_INPUT), 12);
+    fn test_part_two() {
+        assert_eq!(part_two(TEST_INPUT), 12);
     }
+}
+
+fn main() {
+    let lines = fs::read_to_string("input/day2_input").expect("Can't read file");
+    println!("{}", part_one(&lines));
+    println!("{}", part_two(&lines));
 }

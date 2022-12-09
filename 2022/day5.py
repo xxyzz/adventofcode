@@ -5,7 +5,7 @@ def main() -> None:
     stacks = [[] for _ in range(10)]
     parsing_stacks = True
 
-    with open("day5_input") as f:
+    with open("input/day5_input") as f:
         for line in f:
             line = line.removesuffix("\n")
             if not line:

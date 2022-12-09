@@ -2,13 +2,13 @@ import unittest
 
 
 def part_one() -> int:
-    with open("src/day6_input") as f:
+    with open("input/day6_input") as f:
         return find_marker(f.read().strip(), 4)
     return -1
 
 
 def part_two() -> int:
-    with open("src/day6_input") as f:
+    with open("input/day6_input") as f:
         return find_marker(f.read().strip(), 14)
     return -1
 
@@ -37,4 +37,5 @@ class TestDevice(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    print(part_one())
     print(part_two())
