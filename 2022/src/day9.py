@@ -22,7 +22,7 @@ def part_one(path: str | None = None) -> int:
                         head[1] -= 1
 
                 move(head, tail)
-                visited_spots.add((tail[0], tail[1]))
+                visited_spots.add(tuple(tail))
 
     return len(visited_spots)
 
@@ -30,7 +30,7 @@ def part_one(path: str | None = None) -> int:
 def part_two(path: str | None = None) -> int:
     visited_spots = {(0, 0)}
     head = [0, 0]
-    tails = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+    tails = [[0, 0] for _ in range(9)]
     with open(path if path else "src/day9_input") as f:
         for line in f:
             direction, steps_str = line.strip().split()
@@ -50,7 +50,7 @@ def part_two(path: str | None = None) -> int:
                 move(head, tails[0])
                 for i in range(1, 9):
                     move(tails[i - 1], tails[i])
-                visited_spots.add((tails[8][0], tails[8][1]))
+                visited_spots.add(tuple(tails[-1]))
 
     return len(visited_spots)
 
@@ -77,7 +77,6 @@ def move(head, tail):
                 tail[0] += 1
             else:
                 tail[0] -= 1
-    return tail
 
 
 def diagonal_spots(loc: list[int]) -> list[list[int]]:

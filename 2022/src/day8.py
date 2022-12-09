@@ -45,17 +45,7 @@ def part_one(path: str | None = None) -> int:
 
 
 def scan_trees(f: TextIO) -> list[list[int]]:
-    trees: list[list[int]] = []
-    visible_trees = 0
-
-    for line in f:
-        line = line.strip()
-        row: list[int] = []
-        for tree in line:
-            row.append(int(tree))
-        trees.append(row)
-
-    return trees
+    return [[int(v) for v in line.strip()] for line in f]
 
 
 def part_two(path: str | None = None) -> int:

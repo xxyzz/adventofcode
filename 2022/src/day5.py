@@ -2,7 +2,7 @@ import sys
 
 
 def main() -> None:
-    stacks = [[], [], [], [], [], [], [], [], [], []]
+    stacks = [[] for _ in range(10)]
     parsing_stacks = True
 
     with open("day5_input") as f:
