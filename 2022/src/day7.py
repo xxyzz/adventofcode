@@ -1,8 +1,8 @@
 import io
 import unittest
+from collections import deque
 from dataclasses import dataclass
 from typing import Any, TextIO
-from collections import deque
 
 
 @dataclass

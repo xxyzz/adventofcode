@@ -1,6 +1,7 @@
 import unittest
 from typing import TextIO
 
+
 def part_one(path: str | None = None) -> int:
     with open(path if path else "src/day8_input") as f:
         trees = scan_trees(f)

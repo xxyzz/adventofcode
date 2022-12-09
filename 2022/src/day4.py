@@ -14,7 +14,10 @@ def main() -> None:
             work_range1 = WorkRange(*[int(v) for v in range1.split("-")])
             work_range2 = WorkRange(*[int(v) for v in range2.split("-")])
 
-            if work_range1.start <= work_range2.end and work_range2.start <= work_range1.end:
+            if (
+                work_range1.start <= work_range2.end
+                and work_range2.start <= work_range1.end
+            ):
                 overlap_pairs += 1
 
     print(overlap_pairs)
