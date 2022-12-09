@@ -103,4 +103,5 @@ class Test(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    print(part_one())
     print(part_two())
