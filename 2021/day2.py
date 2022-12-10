@@ -2,7 +2,7 @@ import unittest
 
 
 def part_one(test_input: str | None = None) -> int:
-    with open(test_input if test_input else "day2_input") as f:
+    with open(test_input if test_input else "input/day2_input") as f:
         x_value = 0
         depth = 0
         for line in f:
@@ -20,7 +20,7 @@ def part_one(test_input: str | None = None) -> int:
 
 
 def part_two(test_input: str | None = None) -> int:
-    with open(test_input if test_input else "day2_input") as f:
+    with open(test_input if test_input else "input/day2_input") as f:
         x_value = 0
         depth = 0
         aim = 0
@@ -41,10 +41,10 @@ def part_two(test_input: str | None = None) -> int:
 
 class Test(unittest.TestCase):
     def test_part_one(self):
-        self.assertEqual(part_one("day2_test_input"), 150)
+        self.assertEqual(part_one("input/day2_test_input"), 150)
 
     def test_part_two(self):
-        self.assertEqual(part_two("day2_test_input"), 900)
+        self.assertEqual(part_two("input/day2_test_input"), 900)
 
 
 if __name__ == "__main__":
