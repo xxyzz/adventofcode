@@ -1,28 +1,34 @@
-import heapq
-import sys
+import unittest
 
 
-def main() -> None:
-    input_file_path = sys.argv[1]
-    max_calories = 0
-    all_calories = []
-    with open(input_file_path) as f:
-        current_calories = 0
-        for line in f:
-            line = line.strip()
-            if line:
-                current_calories += int(line)
-            else:
-                if current_calories > max_calories:
-                    max_calories = current_calories
-                heapq.heappush(all_calories, current_calories)
-                current_calories = 0
+def part_one(input_file: str | None = None) -> int:
+    with open(input_file if input_file else "input/day1_input") as f:
+        elf_calories = f.read().split("\n\n")
+        return max(
+            sum(int(calorie) for calorie in calories.split())
+            for calories in elf_calories
+        )
 
-    print(max_calories)
-    top_three = heapq.nlargest(3, all_calories)
-    print(top_three)
-    print(sum(top_three))
+
+def part_two(input_file: str | None = None) -> int:
+    with open(input_file if input_file else "input/day1_input") as f:
+        elf_calories = f.read().split("\n\n")
+        sum_elf_calories = [
+            sum(int(calorie) for calorie in calories.split())
+            for calories in elf_calories
+        ]
+        sum_elf_calories.sort(reverse=True)
+        return sum(sum_elf_calories[:3])
+
+
+class Test(unittest.TestCase):
+    def test_part_one(self):
+        self.assertEqual(part_one("input/day1_test_input"), 24000)
+
+    def test_part_two(self):
+        self.assertEqual(part_two("input/day1_test_input"), 45000)
 
 
 if __name__ == "__main__":
-    main()
+    print(part_one())
+    print(part_two())

@@ -1,5 +1,6 @@
 import unittest
 
+
 def part_one(path: str | None = None) -> int:
     x_value = 1
     cycles = 0
@@ -22,7 +23,7 @@ def part_one(path: str | None = None) -> int:
                     signal_strengths += check_cycle * x_value
                     check_cycle += 40
                 x_value += int(line.split()[-1])
-        
+
     return signal_strengths
 
 
@@ -38,8 +39,9 @@ def part_two(path: str | None = None):
                 cycles += 1
                 print_screen(x_value, cycles)
                 cycles += 1
-                print_screen(x_value, cycles)  
+                print_screen(x_value, cycles)
                 x_value += int(line.split()[-1])
+
 
 def print_screen(x_value, cycles):
     print_position = (cycles - 1) % 40
