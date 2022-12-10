@@ -3,25 +3,14 @@ import unittest
 
 def part_one(input_text: str | None = None) -> int:
     with open(input_text if input_text else "input/day1_input", encoding="utf-8") as f:
-        result = 0
-        values = [int(line) for line in f]
-        for i in range(1, len(values)):
-            if values[i] > values[i - 1]:
-                result += 1
-
-        return result
+        nums = [int(line.strip()) for line in f]
+        return sum(a < b for a, b in zip(nums, nums[1:]))
 
 
 def part_two(input_text: str | None = None) -> int:
     with open(input_text if input_text else "input/day1_input", encoding="utf-8") as f:
-        result = 0
-        values = [int(line) for line in f]
-        for i in range(len(values) - 3):
-            first_window = values[i : i + 3]
-            second_window = values[i + 1 : i + 4]
-            if sum(second_window) > sum(first_window):
-                result += 1
-        return result
+        nums = [int(line.strip()) for line in f]
+        return sum(a < b for a, b in zip(nums, nums[3:]))
 
 
 class Test(unittest.TestCase):

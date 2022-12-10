@@ -4,7 +4,7 @@ from collections import Counter
 
 
 def most_common_bit_at_col(nums: list[int], nth_bit: int) -> int:
-    num_of_ones = sum((1 if (num >> nth_bit) & 1 else 0 for num in nums))
+    num_of_ones = sum(1 if (num >> nth_bit) & 1 else 0 for num in nums)
     return 1 if num_of_ones >= math.ceil(len(nums) / 2) else 0
 
 
