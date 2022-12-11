@@ -4,18 +4,14 @@ import unittest
 def part_one(input_file: str | None = None) -> int:
     with open(input_file if input_file else "input/day1_input") as f:
         elf_calories = f.read().split("\n\n")
-        return max(
-            sum(int(calorie) for calorie in calories.split())
-            for calories in elf_calories
-        )
+        return max(sum(map(int, calories.split())) for calories in elf_calories)
 
 
 def part_two(input_file: str | None = None) -> int:
     with open(input_file if input_file else "input/day1_input") as f:
         elf_calories = f.read().split("\n\n")
         sum_elf_calories = [
-            sum(int(calorie) for calorie in calories.split())
-            for calories in elf_calories
+            sum(map(int, calories.split())) for calories in elf_calories
         ]
         sum_elf_calories.sort(reverse=True)
         return sum(sum_elf_calories[:3])

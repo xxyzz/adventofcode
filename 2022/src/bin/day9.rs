@@ -68,7 +68,7 @@ fn part_two(text: &str) -> usize {
 }
 
 fn drag(head: &Point, tail: &mut Point, visited_points: &mut HashSet<Point>) {
-    if point_distance(&head, &tail) >= 2.0 {
+    if point_distance_square(&head, &tail) > 2 {
         if head.y > tail.y {
             tail.y += 1;
         } else if head.y < tail.y {
@@ -83,8 +83,8 @@ fn drag(head: &Point, tail: &mut Point, visited_points: &mut HashSet<Point>) {
     }
 }
 
-fn point_distance(point_a: &Point, point_b: &Point) -> f64 {
-    return (((point_a.x - point_b.x).pow(2) + (point_a.y - point_b.y).pow(2)) as f64).sqrt();
+fn point_distance_square(point_a: &Point, point_b: &Point) -> i64 {
+    (point_a.x - point_b.x).pow(2) + (point_a.y - point_b.y).pow(2)
 }
 
 #[cfg(test)]
