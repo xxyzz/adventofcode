@@ -1,6 +1,7 @@
 import unittest
 from collections import defaultdict
 
+
 def part_one(test_input: str | None = None) -> int:
     point_counts = defaultdict(int)
     with open(test_input if test_input else "input/day5_input") as f:
@@ -52,6 +53,7 @@ def part_two(test_input: str | None = None) -> int:
                             y = slope * x + b
                             point_counts[(x, y)] += 1
         return sum(v >= 2 for v in point_counts.values())
+
 
 class Test(unittest.TestCase):
     def test_part_one(self):

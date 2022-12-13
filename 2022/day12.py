@@ -1,6 +1,7 @@
 import unittest
 from collections import deque
-from typing import Callable, Generator, TextIO
+from collections.abc import Callable, Generator
+from typing import TextIO
 
 
 def parse_heightmap(

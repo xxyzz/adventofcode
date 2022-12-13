@@ -1,5 +1,6 @@
 import unittest
 
+
 def part_one(test_input: str | None = None) -> int:
     boards: list[list[list[int]]] = []
     board_nums: list[set[int]] = []
@@ -11,8 +12,12 @@ def part_one(test_input: str | None = None) -> int:
             if "," in line_chunk:
                 nums = [int(n) for n in line_chunk.strip().split(",")]
             else:
-                boards.append([list(map(int, row.split())) for row in line_chunk.splitlines()])
-                board_nums.append({boards[-1][row][col] for row in range(5) for col in range(5)})
+                boards.append(
+                    [list(map(int, row.split())) for row in line_chunk.splitlines()]
+                )
+                board_nums.append(
+                    {boards[-1][row][col] for row in range(5) for col in range(5)}
+                )
 
         for num in nums:
             for board, board_num in zip(boards, board_nums):
@@ -60,8 +65,12 @@ def part_two(test_input: str | None = None) -> int:
             if "," in line_chunk:
                 nums = [int(n) for n in line_chunk.strip().split(",")]
             else:
-                boards.append([list(map(int, row.split())) for row in line_chunk.splitlines()])
-                board_nums.append({boards[-1][row][col] for row in range(5) for col in range(5)})
+                boards.append(
+                    [list(map(int, row.split())) for row in line_chunk.splitlines()]
+                )
+                board_nums.append(
+                    {boards[-1][row][col] for row in range(5) for col in range(5)}
+                )
 
         num_of_boards = len(boards)
         win_nums = 0
