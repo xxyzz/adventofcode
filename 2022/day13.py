@@ -1,68 +1,41 @@
 import unittest
-from functools import cmp_to_key
-from itertools import zip_longest
 
 
 def part_one(path: str) -> int:
     with open(path) as f:
-        packet_pairs = []
-        result = 0
-        for pair_index, pairs in enumerate(f.read().split("\n\n")):
-            p_a, p_b = pairs.strip().splitlines()
-            p_a = eval(p_a)
-            p_b = eval(p_b)
-            if check_order(p_a, p_b):
-                result += pair_index + 1
-        return result
+        packet_pairs = [[*map(eval, pair.split())] for pair in f.read().split("\n\n")]
+        return sum(i for i, pair in enumerate(packet_pairs, 1) if less_than(*pair))
 
 
-def check_order(p_a, p_b):
-    if isinstance(p_a, int) and isinstance(p_b, int):
-        if p_a > p_b:
-            return False
-        elif p_a < p_b:
-            return True
-    if isinstance(p_a, list) and isinstance(p_b, list):
-        for e_a, e_b in zip_longest(p_a, p_b):
-            if e_a is None and e_b is not None:
+def less_than(left , right):
+    match left, right:
+        case int(), int():
+            if left < right:
                 return True
-            if e_a is not None and e_b is None:
+            elif left > right:
                 return False
-            r = check_order(e_a, e_b)
-            if r is not None:
-                return r
-    if isinstance(p_a, int) and isinstance(p_b, list):
-        return check_order([p_a], p_b)
-    if isinstance(p_a, list) and isinstance(p_b, int):
-        return check_order(p_a, [p_b])
-
-
-def compare(a, b):
-    r = check_order(a, b)
-    match r:
-        case None:
-            return 0
-        case True:
-            return -1
-        case False:
-            return 1
+        case list(), int():
+            return less_than(left, [right])
+        case int(), list():
+            return less_than([left], right)
+        case list(), list():
+            for r in map(less_than, left, right):
+                if r is not None:
+                    return r
+            return less_than(len(left), len(right))
 
 
 def part_two(path: str) -> int:
     with open(path) as f:
-        packets = [[[2]], [[6]]]
-        result = 0
-        for pair_index, pairs in enumerate(f.read().split("\n\n")):
-            p_a, p_b = pairs.strip().splitlines()
-            packets.append(eval(p_a))
-            packets.append(eval(p_b))
-
-        packets.sort(key=cmp_to_key(compare))
-        result = 1
-        for i, p in enumerate(packets):
-            if p == [[2]] or p == [[6]]:
-                result *= i + 1
-        return result
+        packets = [eval(packet) for packet in f.read().split() if packet]
+        less_than_two = 1
+        less_than_six = 2
+        for packet in packets:
+            if less_than(packet, [[2]]):
+                less_than_two += 1
+            if less_than(packet, [[6]]):
+                less_than_six += 1
+        return less_than_two * less_than_six
 
 
 class Test(unittest.TestCase):
