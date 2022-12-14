@@ -2,13 +2,16 @@ import unittest
 
 DAY = 14
 
+
 def part_one(path: str) -> int:
     cave_map = set()
     sand_count = 0
     max_y = 0
     with open(path) as f:
         for line in f:
-            points = [tuple(map(int, point.split(","))) for point in line.strip().split("->")]
+            points = [
+                tuple(map(int, point.split(","))) for point in line.strip().split("->")
+            ]
             cave_map.add(points[0])
             if points[0][1] > max_y:
                 max_y = points[0][1]
@@ -57,7 +60,9 @@ def part_two(path: str) -> int:
     bottom = 0
     with open(path) as f:
         for line in f:
-            points = [tuple(map(int, point.split(","))) for point in line.strip().split("->")]
+            points = [
+                tuple(map(int, point.split(","))) for point in line.strip().split("->")
+            ]
             cave_map.add(points[0])
             if points[0][1] > max_y:
                 max_y = points[0][1]

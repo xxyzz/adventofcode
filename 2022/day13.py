@@ -1,13 +1,16 @@
+import json
 import unittest
 
 
 def part_one(path: str) -> int:
     with open(path) as f:
-        packet_pairs = [[*map(eval, pair.split())] for pair in f.read().split("\n\n")]
+        packet_pairs = [
+            [*map(json.loads, pair.split())] for pair in f.read().split("\n\n")
+        ]
         return sum(i for i, pair in enumerate(packet_pairs, 1) if less_than(*pair))
 
 
-def less_than(left , right):
+def less_than(left, right):
     match left, right:
         case int(), int():
             if left < right:
@@ -27,7 +30,7 @@ def less_than(left , right):
 
 def part_two(path: str) -> int:
     with open(path) as f:
-        packets = [eval(packet) for packet in f.read().split() if packet]
+        packets = [json.loads(packet) for packet in f.read().split() if packet]
         less_than_two = 1
         less_than_six = 2
         for packet in packets:
