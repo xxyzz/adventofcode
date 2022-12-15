@@ -1,4 +1,5 @@
 import unittest
+
 # https://libreddit.domain.glass/r/adventofcode/comments/rawxad
 # https://github.com/mebeim/aoc/tree/master/2021#day-7---the-treachery-of-whales
 

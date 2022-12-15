@@ -1,5 +1,6 @@
 import unittest
 
+
 def part_one(input_path: str) -> int:
     with open(input_path) as f:
         result = 0
@@ -16,8 +17,12 @@ def part_two(input_path: str) -> int:
         output_segments = []
         for line in f:
             patterns_str, outputs_str = line.split("|")
-            pattern_segments.append([frozenset(pattern) for pattern in patterns_str.split()])
-            output_segments.append([frozenset(pattern) for pattern in outputs_str.split()])
+            pattern_segments.append(
+                [frozenset(pattern) for pattern in patterns_str.split()]
+            )
+            output_segments.append(
+                [frozenset(pattern) for pattern in outputs_str.split()]
+            )
 
         for patterns, outputs in zip(pattern_segments, output_segments):
             pattern_to_digit: dict[frozenset[str], int] = {}
@@ -32,7 +37,9 @@ def part_two(input_path: str) -> int:
                     case 7:
                         pattern_to_digit[pattern] = 8
 
-            digit_to_pattern = {digit: pattern for pattern, digit in pattern_to_digit.items()}
+            digit_to_pattern = {
+                digit: pattern for pattern, digit in pattern_to_digit.items()
+            }
 
             for pattern in patterns:
                 match len(pattern):
@@ -56,6 +63,7 @@ def part_two(input_path: str) -> int:
                 value = value * 10 + pattern_to_digit[output]
             result += value
         return result
+
 
 class Test(unittest.TestCase):
     def test_part_one(self):
