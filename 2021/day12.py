@@ -1,5 +1,4 @@
 import unittest
-from collections import defaultdict, deque
 
 DAY = 12
 
