@@ -3,6 +3,7 @@ import itertools
 import math
 import unittest
 from collections import defaultdict
+from collections.abc import Generator
 
 DAY = 16
 
@@ -35,7 +36,13 @@ def parse_input(path: str) -> tuple[dict[str, int], dict[tuple[str, str], int]]:
         return valve_rates, distances
 
 
-def dfs(valve, remain_time, distances, remain_valves, opened_valves):
+def dfs(
+    valve: str,
+    remain_time: int,
+    distances: dict[tuple[str, str], int],
+    remain_valves: frozenset[str],
+    opened_valves: dict[str, int],
+) -> Generator[dict[str, int], None, None]:
     for next_valve in remain_valves:
         new_time = remain_time - distances[valve, next_valve] - 1
         if new_time <= 0:
@@ -68,7 +75,7 @@ def part_one(path: str) -> int:
 
 def part_two(path: str) -> int:
     valve_rates, distances = parse_input(path)
-    released_pressure = defaultdict(int)
+    released_pressure: dict[frozenset[str], int] = defaultdict(int)
     for paths in dfs("AA", 26, distances, frozenset(valve_rates), {}):
         paths_set = frozenset(paths)
         pressure = calculate_pressure(paths, valve_rates)

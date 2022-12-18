@@ -3,36 +3,38 @@ import unittest
 DAY = 17
 
 
-def rock_one(x, y):  # -
-    return [(x, y), (x + 1, y), (x + 2, y), (x + 3, y)]
-
-
-def rock_two(x, y):  # +
-    return [(x + 1, y), (x, y + 1), (x + 1, y + 1), (x + 2, y + 1), (x + 1, y + 2)]
-
-
-def rock_three(x, y):  # L
-    return [(x, y), (x + 1, y), (x + 2, y), (x + 2, y + 1), (x + 2, y + 2)]
-
-
-def rock_four(x, y):  # |
-    return [(x, y), (x, y + 1), (x, y + 2), (x, y + 3)]
-
-
-def rock_five(x, y):  # cube
-    return [(x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1)]
+def init_rock_position(x: int, y: int, rock_type: int) -> list[tuple[int, int]]:
+    match rock_type:
+        case 0:  # -
+            return [(x, y), (x + 1, y), (x + 2, y), (x + 3, y)]
+        case 1:  # +
+            return [
+                (x + 1, y),
+                (x, y + 1),
+                (x + 1, y + 1),
+                (x + 2, y + 1),
+                (x + 1, y + 2),
+            ]
+        case 2:  # L
+            return [(x, y), (x + 1, y), (x + 2, y), (x + 2, y + 1), (x + 2, y + 2)]
+        case 3:  # |
+            return [(x, y), (x, y + 1), (x, y + 2), (x, y + 3)]
+        case 4:  # cube
+            return [(x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1)]
+        case _:
+            return [(0, 0)]
 
 
 def part_one(path: str, loop: int = 2022) -> int:
     with open(path) as f:
         jet_patterns = f.read().strip()
         jet_len = len(jet_patterns)
-        rocks = [rock_one, rock_two, rock_three, rock_four, rock_five]
         highest_y = -1
-        grid = set()
+        grid: set[tuple[int, int]] = set()
         j = 0
+        height_pattern: dict[tuple[int, int], tuple[int, int]] = {}
         for i in range(loop):
-            new_rock = rocks[i % 5](2, highest_y + 4)
+            new_rock = init_rock_position(2, highest_y + 4, i % 5)
             # print("new rock")
             # print_grid(grid | set(new_rock))
             while True:
@@ -50,14 +52,23 @@ def part_one(path: str, loop: int = 2022) -> int:
                 if move_down(new_rock, grid):
                     rock_highest_y = max(y for x, y in new_rock)
                     highest_y = max(rock_highest_y, highest_y)
-                    print(f"{i=} {highest_y}")
                     # print("down")
                     # print_grid(grid | set(new_rock))
                     break
+
+            if (i % 5, j % jet_len) in height_pattern:
+                prev_loop, prev_height = height_pattern[i % 5, j % jet_len]
+                quotient, remainder = divmod(loop - i, i - prev_loop)
+                if remainder == 0:
+                    result = quotient * (highest_y - prev_height) + highest_y
+                    return result if loop % 10 == 0 else result - 1  # weird off-by-one
+            else:
+                height_pattern[i % 5, j % jet_len] = i, highest_y
+
         return highest_y + 1
 
 
-def print_grid(grid):
+def print_grid(grid: set[tuple[int, int]]) -> None:
     for y in reversed(range(10)):
         for x in range(7):
             if (x, y) in grid:
@@ -68,7 +79,7 @@ def print_grid(grid):
     print()
 
 
-def move_left(rock, grid):
+def move_left(rock: list[tuple[int, int]], grid: set[tuple[int, int]]) -> None:
     if any(x == 0 or (x - 1, y) in grid for x, y in rock):
         return
     for i in range(len(rock)):
@@ -76,7 +87,7 @@ def move_left(rock, grid):
         rock[i] = (x - 1, y)
 
 
-def move_right(rock, grid):
+def move_right(rock: list[tuple[int, int]], grid: set[tuple[int, int]]) -> None:
     if any(x == 6 or (x + 1, y) in grid for x, y in rock):
         return
     for i in range(len(rock)):
@@ -84,7 +95,7 @@ def move_right(rock, grid):
         rock[i] = (x + 1, y)
 
 
-def move_down(rock, grid):
+def move_down(rock: list[tuple[int, int]], grid: set[tuple[int, int]]) -> bool:
     if any(y == 0 or (x, y - 1) in grid for x, y in rock):
         for point in rock:
             grid.add(point)
@@ -92,20 +103,21 @@ def move_down(rock, grid):
     for i in range(len(rock)):
         x, y = rock[i]
         rock[i] = (x, y - 1)
+    return False
 
 
 def part_two(path: str) -> int:
-    return part_one(path, 1000000000000)
+    return part_one(path, 1_000_000_000_000)
 
 
 class Test(unittest.TestCase):
     def test_part_one(self):
         self.assertEqual(part_one(f"input/day{DAY}_test_input"), 3068)
 
-    # def test_part_two(self):
-    #     self.assertEqual(part_two(f"input/day{DAY}_test_input"), 1514285714288)
+    def test_part_two(self):
+        self.assertEqual(part_two(f"input/day{DAY}_test_input"), 1_514_285_714_288)
 
 
 if __name__ == "__main__":
     print(part_one(f"input/day{DAY}_input"))
-    # print(part_two(f"input/day{DAY}_input"))
+    print(part_two(f"input/day{DAY}_input"))
