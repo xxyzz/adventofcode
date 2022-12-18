@@ -15,6 +15,7 @@ def parse(f):
 
     return connected_caves
 
+
 # https://www.reddit.com/r/adventofcode/comments/rehj2r/comment/ho7x83o
 def dfs(connected_caves, cave, visited_caves, allow_revisit):
     if cave == "end":
