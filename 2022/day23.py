@@ -1,13 +1,16 @@
-import unittest
 import math
+import unittest
 from collections import defaultdict
+from itertools import count
 
 DAY = 23
 
-DIRECTIONS = [[(-1, 0), (-1, -1), (-1, 1)], # N, NW, NE
-              [(1, 0), (1, -1), (1, 1)],    # S, SW, SE
-              [(0, -1), (-1, -1), (1, -1)], # W, NW, SW
-              [(0, 1), (-1, 1), (1, 1)]]    # E, NE, SE
+DIRECTIONS = [
+    [(-1, 0), (-1, -1), (-1, 1)],  # N, NW, NE
+    [(1, 0), (1, -1), (1, 1)],  # S, SW, SE
+    [(0, -1), (-1, -1), (1, -1)],  # W, NW, SW
+    [(0, 1), (-1, 1), (1, 1)],  # E, NE, SE
+]
 
 
 def parse_map(path: str) -> set[tuple[int, int]]:
@@ -19,9 +22,20 @@ def parse_map(path: str) -> set[tuple[int, int]]:
                     eleves_map.add((row, col))
         return eleves_map
 
+
 def adjancent_positions(row, col):
-    for d_r, d_c in [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]:
+    for d_r, d_c in [
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
+        (0, -1),
+        (0, 1),
+        (1, -1),
+        (1, 0),
+        (1, 1),
+    ]:
         yield row + d_r, col + d_c
+
 
 def part_one(path: str) -> int:
     eleves_map = parse_map(path)
@@ -37,8 +51,14 @@ def part_one(path: str) -> int:
                 new_loc_count[new_loc] += 1
                 continue
             for i in range(4):
-                if all((row + dr, col + dc) not in eleves_map for dr, dc in DIRECTIONS[(round_count + i) % 4]):
-                    new_loc = row + DIRECTIONS[(round_count + i) % 4][0][0], col + DIRECTIONS[(round_count + i) % 4][0][1]
+                if all(
+                    (row + dr, col + dc) not in eleves_map
+                    for dr, dc in DIRECTIONS[(round_count + i) % 4]
+                ):
+                    new_loc = (
+                        row + DIRECTIONS[(round_count + i) % 4][0][0],
+                        col + DIRECTIONS[(round_count + i) % 4][0][1],
+                    )
                     break
             new_map[(row, col)] = new_loc
             new_loc_count[new_loc] += 1
@@ -74,8 +94,44 @@ def print_map(eleves_map):
                 print(".", end="")
         print()
 
-def part_two(input_path: str) -> int:
-    pass
+
+def part_two(path: str) -> int:
+    eleves_map = parse_map(path)
+    eleves_num = len(eleves_map)
+    for round_count in count():
+        new_map = {loc: loc for loc in eleves_map}
+        new_loc_count: dict[tuple[int, int], int] = defaultdict(int)
+        for row, col in eleves_map:
+            new_loc = (row, col)
+            if all(loc not in eleves_map for loc in adjancent_positions(row, col)):
+                new_loc_count[new_loc] += 1
+                continue
+            for i in range(4):
+                if all(
+                    (row + dr, col + dc) not in eleves_map
+                    for dr, dc in DIRECTIONS[(round_count + i) % 4]
+                ):
+                    new_loc = (
+                        row + DIRECTIONS[(round_count + i) % 4][0][0],
+                        col + DIRECTIONS[(round_count + i) % 4][0][1],
+                    )
+                    break
+            new_map[(row, col)] = new_loc
+            new_loc_count[new_loc] += 1
+
+        for origin_loc, new_loc in new_map.items():
+            if new_loc_count[new_loc] > 1:
+                new_map[origin_loc] = origin_loc
+
+        no_one_moves = True
+        for origin_loc, new_loc in new_map.items():
+            if origin_loc != new_loc:
+                no_one_moves = False
+        if no_one_moves:
+            return round_count + 1
+        eleves_map = set(new_map.values())
+
+    return 1
 
 
 class Test(unittest.TestCase):
@@ -85,10 +141,10 @@ class Test(unittest.TestCase):
     # def test_part_one1(self):
     #     self.assertEqual(part_one(f"input/day{DAY}_test_input1"), 110)
 
-    # def test_part_two(self):
-    #     self.assertEqual(part_two(f"input/day{DAY}_test_input"), )
+    def test_part_two(self):
+        self.assertEqual(part_two(f"input/day{DAY}_test_input"), 20)
 
 
 if __name__ == "__main__":
     print(part_one(f"input/day{DAY}_input"))
-    # print(part_two(f"input/day{DAY}_input"))
+    print(part_two(f"input/day{DAY}_input"))
