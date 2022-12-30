@@ -1,6 +1,6 @@
-import unittest
-import re
 import functools
+import re
+import unittest
 
 DAY = 20
 
@@ -10,13 +10,15 @@ def part_one(path: str) -> int:
         nums = list(int(line.strip()) for line in f)
         nums_len = len(nums)
         indices = list(range(nums_len))
-        for i in indices.copy():
+        for i in range(nums_len):
             j = indices.index(i)
             indices.pop(j)
             indices.insert((j + nums[i]) % (nums_len - 1), i)
 
         zero_index = indices.index(nums.index(0))
-        return sum(nums[indices[(zero_index + x) % nums_len]] for x in [1000, 2000, 3000])
+        return sum(
+            nums[indices[(zero_index + x) % nums_len]] for x in [1000, 2000, 3000]
+        )
 
 
 def part_two(path: str) -> int:
@@ -30,7 +32,9 @@ def part_two(path: str) -> int:
             indices.insert((j + nums[i]) % (nums_len - 1), i)
 
         zero_index = indices.index(nums.index(0))
-        return sum(nums[indices[(zero_index + x) % nums_len]] for x in [1000, 2000, 3000])
+        return sum(
+            nums[indices[(zero_index + x) % nums_len]] for x in [1000, 2000, 3000]
+        )
 
 
 class Test(unittest.TestCase):

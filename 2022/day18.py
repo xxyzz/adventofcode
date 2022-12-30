@@ -1,9 +1,10 @@
-import unittest
-import math
 import itertools
+import math
+import unittest
 from collections import defaultdict, deque
 
 DAY = 18
+
 
 def part_one(path: str) -> int:
     with open(path) as f:
@@ -35,9 +36,17 @@ def check_adjacent(cube1, cube2) -> bool:
         return True
     return False
 
+
 def adjacent_cube(point):
     x, y, z = point
-    for dx, dy, dz in [(0, 0, 1), (0, 0, -1), (1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0)]:
+    for dx, dy, dz in [
+        (0, 0, 1),
+        (0, 0, -1),
+        (1, 0, 0),
+        (-1, 0, 0),
+        (0, 1, 0),
+        (0, -1, 0),
+    ]:
         yield x + dx, y + dy, z + dz
 
 
@@ -67,15 +76,20 @@ def part_two(path: str) -> int:
 
     surfaces = cube_surfaces({cube: 6 for cube in lava_cubes})
     x_range, y_range, z_range = cube_range(lava_cubes)
-    bounding_box = {(x, y, z) for x, y, z in itertools.product(x_range, y_range, z_range)}
+    bounding_box = {
+        (x, y, z) for x, y, z in itertools.product(x_range, y_range, z_range)
+    }
     visited = set()
     for cube in bounding_box - lava_cubes:
         if cube not in visited:
-            touched_faces, visited_cubes = escape(cube, lava_cubes, x_range, y_range, z_range)
+            touched_faces, visited_cubes = escape(
+                cube, lava_cubes, x_range, y_range, z_range
+            )
             visited |= visited_cubes
             surfaces -= touched_faces
     return surfaces
-            
+
+
 # https://github.com/mebeim/aoc/tree/master/2022#day-18---boiling-boulders
 def escape(start, lava_cubes, x_range, y_range, z_range):
     q = deque([start])

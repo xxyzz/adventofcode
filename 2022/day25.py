@@ -3,6 +3,7 @@ from itertools import zip_longest
 
 DAY = 25
 
+
 def SNAFU_to_int(num: str) -> int:
     match num:
         case "=":
@@ -13,6 +14,7 @@ def SNAFU_to_int(num: str) -> int:
             return 0
         case _:
             return int(num)
+
 
 def SNAFU_add(num_a: str, num_b: str) -> str:
     sum_num = ""
@@ -68,7 +70,7 @@ def part_one(path: str) -> str:
         for line in f:
             result = SNAFU_add(result, line.strip())
         return result
-        
+
 
 def part_two(path: str) -> str:
     with open(path) as f:
