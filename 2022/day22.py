@@ -92,17 +92,19 @@ def part_two(input_path: str) -> int:
                 for _ in range(path):
                     next_row = row + DIRECTIONS[direction][0]
                     next_column = column + DIRECTIONS[direction][1]
+                    next_direction = direction
                     if (next_row, next_column) not in board:
-                        next_row, next_column, direction = wrap_around_cube(
+                        next_row, next_column, next_direction = wrap_around_cube(
                             row, column, direction, board, size
                         )
                     if board[next_row, next_column] == "#":
                         break
-                    row, column = next_row, next_column
+                    row, column, direction = next_row, next_column, next_direction
             case "R":
                 direction = (direction + 1) % 4
             case "L":
                 direction = (direction - 1) % 4
+
     return 1000 * row + 4 * column + direction
 
 
@@ -147,7 +149,7 @@ class Test(unittest.TestCase):
         self.assertEqual(part_one(f"input/day{DAY}_test_input"), 6032)
 
     # def test_part_two(self):
-    #     self.assertEqual(part_two(f"input/day{DAY}_test_input"), 5031)
+    #     self.assertEqual(part_two(f"input/day{DAY}_input"), )
 
 
 if __name__ == "__main__":
