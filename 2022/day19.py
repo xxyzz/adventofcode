@@ -25,10 +25,9 @@ def part_one(path: str) -> int:
         result = 0
         global MAX_GEODE
         for blueprint_id, blueprint in enumerate(blueprints, start=1):
-            print(blueprint)
             MAX_GEODE = 0
             geodes = dfs(blueprint, 24, 0, 1, 0, 0, 0, 0, 0, 0)
-            print(f"{blueprint_id=} {geodes=}")
+            # print(f"{blueprint_id=} {geodes=}")
             result += blueprint_id * geodes
         return result
 
@@ -46,6 +45,8 @@ def dfs(
     geode_robots,
 ):
     global MAX_GEODE
+    if max_produceable(geode, geode_robots, minutes) <= MAX_GEODE:
+        return
 
     ore_robot_ore = blueprint[0][0]
     clay_robot_ore = blueprint[1][0]
@@ -54,19 +55,13 @@ def dfs(
     max_ore_needed = max(
         ore_robot_ore, clay_robot_ore, obsidian_robot_ore, geode_robot_ore
     )
-
     new_ore = ore + ore_robots  # Damn, can't use += at here
     new_clay = clay + clay_robots
     new_obsidian = obsidian + obsidian_robots
     new_geode = geode + geode_robots
     minutes -= 1
     if minutes <= 0:
-        # if new_geode > MAX_GEODE:
-        # print(f"{new_geode=} {ore_robots=} {clay_robots=} {obsidian_robots=} {geode_robots=}")
         MAX_GEODE = max(MAX_GEODE, new_geode)
-        return
-
-    if max_produceable(new_geode, geode_robots, minutes) < MAX_GEODE:
         return
 
     if ore >= ore_robot_ore and ore_robots < max_ore_needed:
