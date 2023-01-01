@@ -7,8 +7,7 @@ DAY = 19
 
 MAX_GEODE = 0
 
-
-def part_one(path: str) -> int:
+def parse_blueprints(path: str):
     with open(path) as f:
         blueprints = []
         for line in f:
@@ -21,15 +20,7 @@ def part_one(path: str) -> int:
                     )
                 )
             blueprints.append(blueprint)
-
-        result = 0
-        global MAX_GEODE
-        for blueprint_id, blueprint in enumerate(blueprints, start=1):
-            MAX_GEODE = 0
-            geodes = dfs(blueprint, 24, 0, 1, 0, 0, 0, 0, 0, 0)
-            # print(f"{blueprint_id=} {geodes=}")
-            result += blueprint_id * geodes
-        return result
+        return blueprints
 
 
 def dfs(
@@ -146,19 +137,37 @@ def max_produceable(current, robots, minutes):
     return current + robots * minutes + minutes * (minutes - 1) // 2
 
 
+def part_one(path: str) -> int:
+    blueprints = parse_blueprints(path)
+    result = 0
+    global MAX_GEODE
+    for blueprint_id, blueprint in enumerate(blueprints, start=1):
+        MAX_GEODE = 0
+        geodes = dfs(blueprint, 24, 0, 1, 0, 0, 0, 0, 0, 0)
+        # print(f"{blueprint_id=} {geodes=}")
+        result += blueprint_id * geodes
+    return result
+
+
 def part_two(path: str) -> int:
-    with open(path) as f:
-        pass
+    blueprints = parse_blueprints(path)
+    result = 1
+    global MAX_GEODE
+    for blueprint in blueprints[:3]:
+        MAX_GEODE = 0
+        geodes = dfs(blueprint, 32, 0, 1, 0, 0, 0, 0, 0, 0)
+        result *= geodes
+    return result
 
 
 class Test(unittest.TestCase):
     def test_part_one(self):
         self.assertEqual(part_one(f"input/day{DAY}_test_input"), 33)
 
-    # def test_part_two(self):
-    #     self.assertEqual(part_two(f"input/day{DAY}_test_input"), )
+    def test_part_two(self):
+        self.assertEqual(part_two(f"input/day{DAY}_test_input"), 56 * 62)
 
 
 if __name__ == "__main__":
     print(part_one(f"input/day{DAY}_input"))
-    # print(part_two(f"input/day{DAY}_input"))
+    print(part_two(f"input/day{DAY}_input"))
