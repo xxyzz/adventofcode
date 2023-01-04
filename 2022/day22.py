@@ -109,7 +109,7 @@ def part_two(input_path: str) -> int:
 
 
 # https://reddit.com/r/adventofcode/comments/zseg3c/_/j17qdop/
-# 0: right, 1: down, 2: left, 3:  up
+# 0: right, 1: down, 2: left, 3: up
 def wrap_around_cube(row, column, direction, board, size):
     match (row - 1) // size, (column - 1) // size, direction:
         # left edges
