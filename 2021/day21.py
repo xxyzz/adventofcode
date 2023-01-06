@@ -1,52 +1,69 @@
+import functools
+import itertools
 import unittest
 
 DAY = 21
+
 
 def parse_input(input_path: str) -> list[int]:
     with open(input_path) as f:
         return list(int(line.strip().split(":")[-1]) for line in f)
 
-def roll_dice(dice_num: int) -> tuple[int, int]:
-    sum_roll = 0
-    for _ in range(3):
-        dice_num = (dice_num % 100) + 1
-        sum_roll += dice_num
-    return dice_num, sum_roll
+
+# https://github.com/norvig/pytudes/blob/main/ipynb/Advent-2021.ipynb
+NORMAL_DICE = itertools.cycle(range(1, 101))
+
 
 def part_one(input_path: str) -> int:
-    player1_pos, player2_pos = parse_input(input_path)
-    player1_score = 0
-    player2_score = 0
-    dice_num = 0
-    rolled_num = 0
-    while True:
-        dice_num, sum_roll = roll_dice(dice_num)
-        rolled_num += 3
-        player1_pos = (player1_pos + sum_roll - 1) % 10 + 1
-        player1_score += player1_pos
-        if player1_score >= 1000:
-            return player2_score * rolled_num
+    player_positions = parse_input(input_path)
+    player_scores = [0, 0]
+    for turn in itertools.count(1):
+        player = (turn - 1) % 2
+        steps = next(NORMAL_DICE) + next(NORMAL_DICE) + next(NORMAL_DICE)
+        next_pos = (player_positions[player] + steps - 1) % 10 + 1
+        player_positions[player] = next_pos
+        player_scores[player] += next_pos
+        if player_scores[player] >= 1000:
+            return min(player_scores) * 3 * turn
 
-        dice_num, sum_roll = roll_dice(dice_num)
-        rolled_num += 3
-        player2_pos = (player2_pos + sum_roll - 1) % 10 + 1
-        player2_score += player2_pos
-        if player2_score >= 1000:
-            return player1_score * rolled_num
     return 0
 
 
+QUANTUM_DIE_SUM = list(map(sum, itertools.product([1, 2, 3], repeat=3)))  # 27 universes
+
+
+@functools.cache
+def roll_quantim_die(pos1: int, pos2: int, score1: int, score2: int) -> tuple[int, int]:
+    wins = 0
+    loses = 0
+    if score1 >= 21:
+        wins += 1
+    elif score2 >= 21:
+        loses += 1
+    else:
+        for steps in QUANTUM_DIE_SUM:
+            new_pos1 = (pos1 + steps - 1) % 10 + 1
+            roll_losses, roll_wins = roll_quantim_die(  # player 2 rolls
+                pos2, new_pos1, score2, score1 + new_pos1
+            )
+            wins += roll_wins
+            loses += roll_losses
+    return wins, loses
+
+
 def part_two(input_path: str) -> int:
-    pass
+    pos1, pos2 = parse_input(input_path)
+    return max(roll_quantim_die(pos1, pos2, 0, 0))
+
 
 class Test(unittest.TestCase):
     def test_part_one(self):
         self.assertEqual(part_one(f"input/day{DAY}_test_input"), 739785)
 
-    # def test_part_two(self):
-    #     self.assertEqual(part_two(f"input/day{DAY}_test_input"), )
+    def test_part_two(self):
+        self.assertEqual(part_two(f"input/day{DAY}_test_input"), 444356092776315)
 
 
 if __name__ == "__main__":
     print(part_one(f"input/day{DAY}_input"))
-    # print(part_two(f"input/day{DAY}_input"))
+    print(part_two(f"input/day{DAY}_input"))
