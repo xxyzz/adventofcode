@@ -90,7 +90,7 @@ def solve(start: State) -> int:
             ):
                 continue
             if hallway_index > NON_STOP_HALLWAY[amphipod_type] and any(
-                state.hallway[NON_STOP_HALLWAY[amphipod_type] + 1:hallway_index]
+                state.hallway[NON_STOP_HALLWAY[amphipod_type] + 1 : hallway_index]
             ):
                 continue
             home_room = state.rooms[amphipod_type]
