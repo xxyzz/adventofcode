@@ -3,7 +3,7 @@ from collections import deque
 DAY = 24
 
 # https://reddit.com/r/adventofcode/comments/rnejv5/2021_day_24_solutions/hps5hgw
-def part_one(input_path: str) -> int:
+def part_one(input_path: str) -> str:
     stack: deque[list[int]] = deque()
     result = [""] * 14
     ins_index = 0
@@ -30,10 +30,10 @@ def part_one(input_path: str) -> int:
                 values = [result_index]
             ins_index += 1
             ins_index %= 18
-    return int("".join(result))
+    return "".join(result)
 
 
-def part_two(input_path: str) -> int:
+def part_two(input_path: str) -> str:
     stack: deque[list[int]] = deque()
     result = [""] * 14
     ins_index = 0
@@ -60,7 +60,7 @@ def part_two(input_path: str) -> int:
                 values = [result_index]
             ins_index += 1
             ins_index %= 18
-    return int("".join(result))
+    return "".join(result)
 
 
 if __name__ == "__main__":
