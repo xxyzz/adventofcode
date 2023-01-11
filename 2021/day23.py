@@ -14,6 +14,7 @@ class State:
     energy: int
     rooms: tuple[tuple[int, ...], ...]
     hallway: tuple[int | None, ...] = (None,) * 11
+    # pre_state: Self | None = None
 
     def __lt__(self: Self, other: Self):
         return self.energy < other.energy
@@ -42,7 +43,11 @@ def solve(start: State) -> int:
     while pq:
         state = heapq.heappop(pq)
         if state.is_done:
-            return state.energy
+            energy = state.energy
+            # while state:
+            #     print_state(state, room_size)
+            #     state = state.pre_state
+            return energy
         if state.fingerprint in visited:
             continue
         visited.add(state.fingerprint)
@@ -76,21 +81,28 @@ def solve(start: State) -> int:
                             insert_tuple(
                                 state.hallway, hallway_index, amphipod_type
                             ),  # add to hallway
+                            # state
                         )
                         if new_state.fingerprint not in visited:
                             heapq.heappush(pq, new_state)
 
-        # move from hallyway to room
+        # move from hallway to room
         for hallway_index, amphipod_type in enumerate(state.hallway):
             if amphipod_type is None:
                 continue
             # blocked by other amphipod in hallway
             if hallway_index < NON_STOP_HALLWAY[amphipod_type] and any(
-                state.hallway[hallway_index + 1 : NON_STOP_HALLWAY[amphipod_type]]
+                h is not None
+                for h in state.hallway[
+                    hallway_index + 1 : NON_STOP_HALLWAY[amphipod_type]
+                ]
             ):
                 continue
             if hallway_index > NON_STOP_HALLWAY[amphipod_type] and any(
-                state.hallway[NON_STOP_HALLWAY[amphipod_type] + 1 : hallway_index]
+                h is not None
+                for h in state.hallway[
+                    NON_STOP_HALLWAY[amphipod_type] + 1 : hallway_index
+                ]
             ):
                 continue
             home_room = state.rooms[amphipod_type]
@@ -106,11 +118,46 @@ def solve(start: State) -> int:
                 * (10**amphipod_type),
                 insert_tuple(state.rooms, amphipod_type, home_room + (amphipod_type,)),
                 insert_tuple(state.hallway, hallway_index, None),
+                # state
             )
             if new_state.fingerprint not in visited:
                 heapq.heappush(pq, new_state)
 
     return 0
+
+
+def print_state(state: State, room_size: int):
+    print(state.energy)
+    print("#############")
+
+    print("#", end="")
+    for e in state.hallway:
+        if e is not None:
+            print(chr(65 + e), end="")
+        else:
+            print(".", end="")
+    print("#")
+
+    print("###", end="")
+    for room in state.rooms:
+        if len(room) == room_size:
+            print(chr(65 + room[-1]), end="")
+        else:
+            print(".", end="")
+        print("#", end="")
+    print("##")
+
+    print("  #", end="")
+    for room in state.rooms:
+        if len(room) == room_size:
+            print(chr(65 + room[-2]), end="")
+        elif len(room) == 1:
+            print(chr(65 + room[-1]), end="")
+        else:
+            print(".", end="")
+        print("#", end="")
+    print()
+    print("  #########")
 
 
 class Test(unittest.TestCase):
