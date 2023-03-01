@@ -1,13 +1,13 @@
-use std::fs;
 use std::collections::HashSet;
+use std::fs;
 
 fn part_one(text: &str) -> u32 {
     let values: HashSet<u32> = text.lines().map(|v| v.parse().unwrap()).collect();
     for value in &values {
         let other_value = 2020 - value;
-	if values.contains(&other_value) {
-	    return value * other_value
-	}
+        if values.contains(&other_value) {
+            return value * other_value;
+        }
     }
     0
 }
@@ -15,15 +15,15 @@ fn part_one(text: &str) -> u32 {
 fn part_two(text: &str) -> i64 {
     let values: Vec<i64> = text.lines().map(|v| v.parse().unwrap()).collect();
     for index1 in 0..values.len() - 1 {
-	let rest_sum = 2020 - values[index1];
-	let mut num_set: HashSet<i64> = HashSet::new();
-	for index2 in index1 + 1..values.len() {
-	    if num_set.contains(&(rest_sum - values[index2])) {
-		return values[index1] * values[index2] * (rest_sum - values[index2])
-	    } else {
-		num_set.insert(values[index2]);
-	    }
-	}
+        let rest_sum = 2020 - values[index1];
+        let mut num_set: HashSet<i64> = HashSet::new();
+        for index2 in index1 + 1..values.len() {
+            if num_set.contains(&(rest_sum - values[index2])) {
+                return values[index1] * values[index2] * (rest_sum - values[index2]);
+            } else {
+                num_set.insert(values[index2]);
+            }
+        }
     }
     0
 }
