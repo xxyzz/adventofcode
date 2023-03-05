@@ -2,6 +2,8 @@ use regex::Regex;
 use std::collections::HashSet;
 use std::fs;
 
+const DAY: u32 = 4;
+
 fn part_one(text: &str) -> u32 {
     let check_fields = HashSet::from(["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]);
     let mut valid_num = 0;
@@ -129,19 +131,21 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let lines = fs::read_to_string("input/day4_test_input").expect("Can't read file");
+        let lines =
+            fs::read_to_string(format!("input/day{DAY}_test_input")).expect("Can't read file");
         assert_eq!(part_one(&lines), 2);
     }
 
     #[test]
     fn test_part_two() {
-        let lines = fs::read_to_string("input/day4_test_input").expect("Can't read file");
+        let lines =
+            fs::read_to_string(format!("input/day{DAY}_test_input")).expect("Can't read file");
         assert_eq!(part_two(&lines), 2);
     }
 }
 
 fn main() {
-    let lines = fs::read_to_string("input/day4_input").expect("Can't read file");
+    let lines = fs::read_to_string(format!("input/day{DAY}_input")).expect("Can't read file");
     println!("{}", part_one(&lines));
     println!("{}", part_two(&lines));
 }

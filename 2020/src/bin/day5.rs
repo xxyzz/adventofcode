@@ -1,5 +1,7 @@
 use std::fs;
 
+const DAY: u32 = 5;
+
 fn get_seat_id(boarding_pass: &str) -> u32 {
     let seat_letters: Vec<char> = boarding_pass.chars().collect();
     let row_num = find_row(&seat_letters[..7]);
@@ -72,7 +74,7 @@ mod tests {
 }
 
 fn main() {
-    let lines = fs::read_to_string("input/day5_input").expect("Can't read file");
+    let lines = fs::read_to_string(format!("input/day{DAY}_input")).expect("Can't read file");
     println!("{}", part_one(&lines));
     println!("{}", part_two(&lines));
 }

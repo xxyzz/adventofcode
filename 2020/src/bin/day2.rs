@@ -1,5 +1,7 @@
 use std::fs;
 
+const DAY: u32 = 2;
+
 fn part_one(text: &str) -> u32 {
     let mut valid_count = 0;
     for line in text.lines() {
@@ -49,19 +51,21 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let lines = fs::read_to_string("input/day2_test_input").expect("Can't read file");
+        let lines =
+            fs::read_to_string(format!("input/day{DAY}_test_input")).expect("Can't read file");
         assert_eq!(part_one(&lines), 2);
     }
 
     #[test]
     fn test_part_two() {
-        let lines = fs::read_to_string("input/day2_test_input").expect("Can't read file");
+        let lines =
+            fs::read_to_string(format!("input/day{DAY}_test_input")).expect("Can't read file");
         assert_eq!(part_two(&lines), 1);
     }
 }
 
 fn main() {
-    let lines = fs::read_to_string("input/day2_input").expect("Can't read file");
+    let lines = fs::read_to_string(format!("input/day{DAY}_input")).expect("Can't read file");
     println!("{}", part_one(&lines));
     println!("{}", part_two(&lines));
 }

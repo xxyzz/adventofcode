@@ -1,6 +1,8 @@
 use std::collections::HashSet;
 use std::fs;
 
+const DAY: u32 = 6;
+
 fn part_one(text: &str) -> u32 {
     let mut question_sum = 0;
     for group in text.split("\n\n") {
@@ -38,19 +40,21 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let lines = fs::read_to_string("input/day6_test_input").expect("Can't read file");
+        let lines =
+            fs::read_to_string(format!("input/day{DAY}_test_input")).expect("Can't read file");
         assert_eq!(part_one(&lines), 11);
     }
 
     #[test]
     fn test_part_two() {
-        let lines = fs::read_to_string("input/day6_test_input").expect("Can't read file");
+        let lines =
+            fs::read_to_string(format!("input/day{DAY}_test_input")).expect("Can't read file");
         assert_eq!(part_two(&lines), 6);
     }
 }
 
 fn main() {
-    let lines = fs::read_to_string("input/day6_input").expect("Can't read file");
+    let lines = fs::read_to_string(format!("input/day{DAY}_input")).expect("Can't read file");
     println!("{}", part_one(&lines));
     println!("{}", part_two(&lines));
 }

@@ -2,6 +2,8 @@ use std::collections::HashSet;
 use std::fs;
 use std::iter::zip;
 
+const DAY: u32 = 3;
+
 fn parse_map(text: &str) -> (HashSet<(usize, usize)>, usize, usize) {
     let mut tree_map: HashSet<(usize, usize)> = HashSet::new();
     let mut row_num = 0;
@@ -68,19 +70,21 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let lines = fs::read_to_string("input/day3_test_input").expect("Can't read file");
+        let lines =
+            fs::read_to_string(format!("input/day{DAY}_test_input")).expect("Can't read file");
         assert_eq!(part_one(&lines), 7);
     }
 
     #[test]
     fn test_part_two() {
-        let lines = fs::read_to_string("input/day3_test_input").expect("Can't read file");
+        let lines =
+            fs::read_to_string(format!("input/day{DAY}_test_input")).expect("Can't read file");
         assert_eq!(part_two(&lines), 336);
     }
 }
 
 fn main() {
-    let lines = fs::read_to_string("input/day3_input").expect("Can't read file");
+    let lines = fs::read_to_string(format!("input/day{DAY}_input")).expect("Can't read file");
     println!("{}", part_one(&lines));
     println!("{}", part_two(&lines));
 }

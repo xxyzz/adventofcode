@@ -1,6 +1,8 @@
 use std::collections::HashSet;
 use std::fs;
 
+const DAY: u32 = 1;
+
 fn part_one(text: &str) -> u32 {
     let values: HashSet<u32> = text.lines().map(|v| v.parse().unwrap()).collect();
     for value in &values {
@@ -34,19 +36,21 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let lines = fs::read_to_string("input/day1_test_input").expect("Can't read file");
+        let lines =
+            fs::read_to_string(format!("input/day{DAY}_test_input")).expect("Can't read file");
         assert_eq!(part_one(&lines), 514579);
     }
 
     #[test]
     fn test_part_two() {
-        let lines = fs::read_to_string("input/day1_test_input").expect("Can't read file");
+        let lines =
+            fs::read_to_string(format!("input/day{DAY}_test_input")).expect("Can't read file");
         assert_eq!(part_two(&lines), 241861950);
     }
 }
 
 fn main() {
-    let lines = fs::read_to_string("input/day1_input").expect("Can't read file");
+    let lines = fs::read_to_string(format!("input/day{DAY}_input")).expect("Can't read file");
     println!("{}", part_one(&lines));
     println!("{}", part_two(&lines));
 }
