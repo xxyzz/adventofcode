@@ -3,15 +3,17 @@
 ## Run code with test input
 
 ```
-$ python3 -m unittest day1.py
+$ cd 2022
 $ cargo test --bin day1
+$ python3 -m unittest day1.py
 ```
 
 ## Run code with puzzle input
 
 ```
-$ python3 day1.py
+$ cd 2022
 $ cargo run --bin day1
+$ python3 day1.py
 ```
 
 ## License
