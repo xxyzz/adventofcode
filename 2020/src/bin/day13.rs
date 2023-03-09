@@ -2,7 +2,7 @@ use std::fs;
 
 const DAY: u32 = 13;
 
-
+// https://github.com/norvig/pytudes/blob/main/ipynb/Advent-2020.ipynb
 fn wait_time(bus_depart_time: usize, time: usize) -> usize {
     if time % bus_depart_time == 0 {
 	0
