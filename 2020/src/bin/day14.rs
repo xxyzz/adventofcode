@@ -104,7 +104,7 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let lines = fs::read_to_string(format!("input/day{DAY}_test")).expect("Can't read file");
+        let lines = fs::read_to_string(format!("input/day{DAY}_test1")).expect("Can't read file");
         assert_eq!(part_one(&lines), 165);
     }
 
@@ -118,7 +118,7 @@ mod tests {
 
     #[test]
     fn test_part_two() {
-        let lines = fs::read_to_string(format!("input/day{DAY}_test")).expect("Can't read file");
+        let lines = fs::read_to_string(format!("input/day{DAY}_test2")).expect("Can't read file");
         assert_eq!(part_two(&lines), 208);
     }
 }
