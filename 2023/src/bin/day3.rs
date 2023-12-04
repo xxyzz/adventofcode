@@ -135,7 +135,7 @@ fn part_two(text: &str) -> i64 {
             }
         }
     }
-    for (_, ratios) in &gear_numbers {
+    for ratios in gear_numbers.values() {
         if ratios.len() == 2 {
             sum += ratios.iter().product::<i64>();
         }
