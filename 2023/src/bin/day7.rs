@@ -1,5 +1,4 @@
-use std::{fs, collections::HashMap, cmp::Ordering};
-
+use std::{cmp::Ordering, collections::HashMap, fs};
 
 #[derive(Eq)]
 struct Hand {
@@ -30,30 +29,40 @@ impl PartialEq for Hand {
     }
 }
 
-
 fn get_hand_type(hand: &str) -> u32 {
     let mut cards: HashMap<char, u32> = HashMap::new();
     for card in hand.chars() {
         cards.entry(card).and_modify(|e| *e += 1).or_insert(1);
     }
+    let mut cards_vec: Vec<_> = cards.iter().collect();
+    cards_vec.sort_by(|a, b| b.1.cmp(a.1));
+
+    if cards.contains_key(&'J') && cards.len() > 1 {
+        let most_card = *cards_vec[0].0;
+        let j_card_num = *cards.get(&'J').unwrap();
+        if most_card != 'J' {
+            cards.entry(most_card).and_modify(|c| *c += j_card_num);
+        } else {
+            let second_most_card = *cards_vec[1].0;
+            cards
+                .entry(second_most_card)
+                .and_modify(|c| *c += j_card_num);
+        }
+        cards.remove_entry(&'J');
+    }
     if cards.len() == 1 {
         return 6;
     } else if cards.len() == 2 {
-        return cards.values().max().unwrap() + 1
+        return cards.values().max().unwrap() + 1;
     } else if cards.len() == 3 {
-        return *cards.values().max().unwrap()
+        return *cards.values().max().unwrap();
     }
     5 - (cards.len() as u32)
 }
 
 fn get_card_strength(card: &char) -> u32 {
-    let strength: HashMap<char, u32> = HashMap::from([
-        ('A', 14),
-        ('K', 13),
-        ('Q', 12),
-        ('J', 11),
-        ('T', 10),
-    ]);
+    let strength: HashMap<char, u32> =
+        HashMap::from([('A', 14), ('K', 13), ('Q', 12), ('J', 1), ('T', 10)]);
     if card.is_ascii_digit() {
         card.to_digit(10).unwrap()
     } else {
@@ -65,11 +74,11 @@ fn compare_same_type(left: &str, right: &str) -> i32 {
     for (left_card, right_card) in left.chars().zip(right.chars()) {
         let left_strength = get_card_strength(&left_card);
         let right_strength = get_card_strength(&right_card);
-        if left_strength > right_strength {
-            return 1;
-        } else if left_strength < right_strength {
-            return -1;
-        }
+        match left_strength.cmp(&right_strength) {
+            Ordering::Greater => return 1,
+            Ordering::Less => return -1,
+            Ordering::Equal => (),
+        };
     }
     0
 }
@@ -78,12 +87,11 @@ fn compare_hand(left: &str, right: &str) -> i32 {
     if left != right {
         let left_type = get_hand_type(left);
         let right_type = get_hand_type(right);
-        if left_type > right_type {
-            return 1;
-        } else if left_type < right_type {
-            return -1
-        }
-        return compare_same_type(left, right);
+        return match left_type.cmp(&right_type) {
+            Ordering::Greater => 1,
+            Ordering::Less => -1,
+            Ordering::Equal => compare_same_type(left, right),
+        };
     }
     0
 }
@@ -93,12 +101,10 @@ fn part_one(text: &str) -> u32 {
 
     for line in text.lines() {
         let split_line: Vec<&str> = line.split_whitespace().collect();
-        hands.push(
-            Hand{
-                cards: split_line[0].to_string(),
-                bids: split_line[1].parse().unwrap(),
-            }
-        );
+        hands.push(Hand {
+            cards: split_line[0].to_string(),
+            bids: split_line[1].parse().unwrap(),
+        });
     }
 
     hands.sort();
@@ -108,9 +114,6 @@ fn part_one(text: &str) -> u32 {
     }
     total
 }
-
-// fn part_two(text: &str) -> u64 {
-// }
 
 #[cfg(test)]
 mod tests {
@@ -122,15 +125,15 @@ KK677 28
 KTJJT 220
 QQQJA 483";
 
-    #[test]
-    fn test_part_one() {
-        assert_eq!(part_one(TEST_INPUT), 6440);
-    }
-
     // #[test]
-    // fn test_part_two() {
-    //     assert_eq!(part_two(TEST_INPUT), );
+    // fn test_part_one() {
+    //     assert_eq!(part_one(TEST_INPUT), 6440);
     // }
+
+    #[test]
+    fn test_part_two() {
+        assert_eq!(part_one(TEST_INPUT), 5905);
+    }
 }
 
 fn main() {

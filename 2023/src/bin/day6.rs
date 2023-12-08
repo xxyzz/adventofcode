@@ -6,9 +6,15 @@ fn part_one(text: &str) -> u64 {
 
     for line in text.lines() {
         if let Some(time_str) = line.strip_prefix("Time:") {
-            times = time_str.split_whitespace().map(|e| e.parse().unwrap()).collect();
+            times = time_str
+                .split_whitespace()
+                .map(|e| e.parse().unwrap())
+                .collect();
         } else if let Some(distance_str) = line.strip_prefix("Distance:") {
-            distances = distance_str.split_whitespace().map(|e| e.parse().unwrap()).collect();
+            distances = distance_str
+                .split_whitespace()
+                .map(|e| e.parse().unwrap())
+                .collect();
         }
     }
 
