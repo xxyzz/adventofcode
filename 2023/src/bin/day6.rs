@@ -20,6 +20,7 @@ fn part_one(text: &str) -> u64 {
 
     let mut chooses: Vec<u64> = Vec::new();
     for (time, distance) in times.iter().zip(distances.iter()) {
+        // https://en.wikipedia.org/wiki/Quadratic_equation
         let temp = (time.powi(2) - 4_f64 * distance).sqrt();
         let mut left = ((time - temp) / 2_f64).ceil();
         let mut right = ((time + temp) / 2_f64).floor();
