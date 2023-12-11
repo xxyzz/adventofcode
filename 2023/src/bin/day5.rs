@@ -1,3 +1,5 @@
+use std::cmp::{max, min};
+use std::collections::VecDeque;
 use std::fs;
 
 #[derive(Clone, Debug)]
@@ -7,7 +9,7 @@ struct Map {
     length: u64,
 }
 
-fn part_one(text: &str) -> u64 {
+fn parse_input(text: &str) -> (Vec<u64>, Vec<Vec<Map>>) {
     let mut map_lists: Vec<Vec<Map>> = Vec::new();
     let mut seeds: Vec<u64> = Vec::new();
     let mut current_maps: Vec<Map> = Vec::new();
@@ -28,7 +30,11 @@ fn part_one(text: &str) -> u64 {
         }
     }
     map_lists.push(current_maps.clone());
+    (seeds, map_lists)
+}
 
+fn part_one(text: &str) -> u64 {
+    let (seeds, map_lists) = parse_input(text);
     let mut min_location = u64::MAX;
     for seed in seeds {
         let mut location = seed;
@@ -44,12 +50,67 @@ fn part_one(text: &str) -> u64 {
             min_location = location;
         }
     }
-
     min_location
 }
 
-// fn part_two(text: &str) -> u32 {
-// }
+fn apply_map(start: u64, end: u64, map: &Map) -> Option<((u64, u64), Vec<(u64, u64)>)> {
+    if start < map.source_start + map.length && end > map.source_start {
+        let interset_left = max(start, map.source_start);
+        let interset_right = min(end, map.source_start + map.length);
+        let mut leftovers = Vec::new();
+        let mapped_range = (
+            map.dest_start + interset_left - map.source_start,
+            map.dest_start + interset_right - map.source_start,
+        );
+        if start < map.source_start {
+            leftovers.push((start, interset_left));
+        }
+        if end > map.source_start + map.length {
+            leftovers.push((interset_right, end));
+        }
+        return Some((mapped_range, leftovers));
+    }
+    None
+}
+
+fn part_two(text: &str) -> u64 {
+    let (seed_nums, map_lists) = parse_input(text);
+    let mut min_location = u64::MAX;
+
+    for (&seed_start, &seed_range) in seed_nums
+        .iter()
+        .step_by(2)
+        .zip(seed_nums.iter().skip(1).step_by(2))
+    {
+        let mut unmapped_ranges = VecDeque::from([(seed_start, seed_start + seed_range)]);
+        let mut mapped_ranges = VecDeque::new();
+        for map_list in &map_lists {
+            mapped_ranges.clear();
+
+            while !unmapped_ranges.is_empty() {
+                let range = unmapped_ranges.pop_front().unwrap();
+                let mut has_interset = false;
+                for map in map_list {
+                    if let Some((mapped_range, leftovers)) = apply_map(range.0, range.1, map) {
+                        mapped_ranges.push_back(mapped_range);
+                        unmapped_ranges.extend(leftovers);
+                        has_interset = true;
+                        break;
+                    }
+                }
+                if !has_interset {
+                    mapped_ranges.push_back(range);
+                }
+            }
+            unmapped_ranges = mapped_ranges.clone();
+        }
+        min_location = min(
+            min_location,
+            mapped_ranges.iter().map(|e| e.0).min().unwrap(),
+        );
+    }
+    min_location
+}
 
 #[cfg(test)]
 mod tests {
@@ -94,14 +155,14 @@ humidity-to-location map:
         assert_eq!(part_one(TEST_INPUT), 35);
     }
 
-    // #[test]
-    // fn test_part_two() {
-    //     assert_eq!(part_two(TEST_INPUT), );
-    // }
+    #[test]
+    fn test_part_two() {
+        assert_eq!(part_two(TEST_INPUT), 46);
+    }
 }
 
 fn main() {
     let lines = fs::read_to_string("input/day5").expect("Can't read file");
     println!("{}", part_one(&lines));
-    // println!("{}", part_two(&lines));
+    println!("{}", part_two(&lines));
 }
