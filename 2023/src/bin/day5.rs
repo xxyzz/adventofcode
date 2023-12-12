@@ -53,20 +53,32 @@ fn part_one(text: &str) -> u64 {
     min_location
 }
 
-fn apply_map(start: u64, end: u64, map: &Map) -> Option<((u64, u64), Vec<(u64, u64)>)> {
-    if start < map.source_start + map.length && end > map.source_start {
-        let interset_left = max(start, map.source_start);
-        let interset_right = min(end, map.source_start + map.length);
+#[derive(Clone, Debug)]
+struct Range {
+    start: u64,
+    end: u64,
+}
+
+fn apply_map(range: &Range, map: &Map) -> Option<(Range, Vec<Range>)> {
+    if range.start < map.source_start + map.length && range.end > map.source_start {
+        let interset_left = max(range.start, map.source_start);
+        let interset_right = min(range.end, map.source_start + map.length);
         let mut leftovers = Vec::new();
-        let mapped_range = (
-            map.dest_start + interset_left - map.source_start,
-            map.dest_start + interset_right - map.source_start,
-        );
-        if start < map.source_start {
-            leftovers.push((start, interset_left));
+        let mapped_range = Range {
+            start: map.dest_start + interset_left - map.source_start,
+            end: map.dest_start + interset_right - map.source_start,
+        };
+        if range.start < map.source_start {
+            leftovers.push(Range {
+                start: range.start,
+                end: interset_left,
+            });
         }
-        if end > map.source_start + map.length {
-            leftovers.push((interset_right, end));
+        if range.end > map.source_start + map.length {
+            leftovers.push(Range {
+                start: interset_right,
+                end: range.end,
+            });
         }
         return Some((mapped_range, leftovers));
     }
@@ -82,7 +94,10 @@ fn part_two(text: &str) -> u64 {
         .step_by(2)
         .zip(seed_nums.iter().skip(1).step_by(2))
     {
-        let mut unmapped_ranges = VecDeque::from([(seed_start, seed_start + seed_range)]);
+        let mut unmapped_ranges = VecDeque::from([Range {
+            start: seed_start,
+            end: seed_start + seed_range,
+        }]);
         let mut mapped_ranges = VecDeque::new();
         for map_list in &map_lists {
             mapped_ranges.clear();
@@ -91,7 +106,7 @@ fn part_two(text: &str) -> u64 {
                 let range = unmapped_ranges.pop_front().unwrap();
                 let mut has_interset = false;
                 for map in map_list {
-                    if let Some((mapped_range, leftovers)) = apply_map(range.0, range.1, map) {
+                    if let Some((mapped_range, leftovers)) = apply_map(&range, map) {
                         mapped_ranges.push_back(mapped_range);
                         unmapped_ranges.extend(leftovers);
                         has_interset = true;
@@ -106,7 +121,7 @@ fn part_two(text: &str) -> u64 {
         }
         min_location = min(
             min_location,
-            mapped_ranges.iter().map(|e| e.0).min().unwrap(),
+            mapped_ranges.iter().map(|e| e.start).min().unwrap(),
         );
     }
     min_location
