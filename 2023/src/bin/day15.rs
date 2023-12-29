@@ -41,9 +41,7 @@ impl LensHashMap {
 
     fn insert(&mut self, new_marker: &str, focal_len: usize) {
         let box_index = hash(new_marker.chars()) as usize;
-        if !self.len_boxes.contains_key(&box_index) {
-            self.len_boxes.insert(box_index, VecDeque::new());
-        }
+        self.len_boxes.entry(box_index).or_default();
         let mut inserted = false;
         let lens = self.len_boxes.get_mut(&box_index).unwrap();
         for (index, (marker, _)) in lens.clone().iter().enumerate() {
