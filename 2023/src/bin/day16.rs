@@ -189,8 +189,51 @@ fn part_one(text: &str) -> usize {
     energized_tails.len()
 }
 
-// fn part_two(text: &str) -> usize {
-// }
+fn part_two(text: &str) -> usize {
+    let mut mirrors: HashMap<(usize, usize), char> = HashMap::new();
+    let mut energized_tails: HashMap<(usize, usize), Vec<Direction>> = HashMap::new();
+    let mut mirror_size = 0;
+    text.lines().enumerate().for_each(|(row, line)| {
+        line.chars().enumerate().for_each(|(col, c)| {
+            if c != '.' {
+                mirrors.insert((row, col), c);
+            }
+        });
+        mirror_size += 1;
+    });
+    let mut max_tails = 0;
+    for (row, direction) in [(0, Direction::Down), (mirror_size - 1, Direction::Up)] {
+        for col in 0..mirror_size {
+            energized_tails.clear();
+            move_beam(
+                (row, col),
+                direction.clone(),
+                mirror_size,
+                &mirrors,
+                &mut energized_tails,
+            );
+            if energized_tails.len() > max_tails {
+                max_tails = energized_tails.len();
+            }
+        }
+    }
+    for (col, direction) in [(0, Direction::Right), (mirror_size - 1, Direction::Left)] {
+        for row in 0..mirror_size {
+            energized_tails.clear();
+            move_beam(
+                (row, col),
+                direction.clone(),
+                mirror_size,
+                &mirrors,
+                &mut energized_tails,
+            );
+            if energized_tails.len() > max_tails {
+                max_tails = energized_tails.len();
+            }
+        }
+    }
+    max_tails
+}
 
 #[cfg(test)]
 mod tests {
@@ -212,14 +255,14 @@ mod tests {
         assert_eq!(part_one(TEST_INPUT), 46);
     }
 
-    // #[test]
-    // fn test_part_two() {
-    //     assert_eq!(part_two(TEST_INPUT), );
-    // }
+    #[test]
+    fn test_part_two() {
+        assert_eq!(part_two(TEST_INPUT), 51);
+    }
 }
 
 fn main() {
     let lines = fs::read_to_string("input/day16").expect("Can't read file");
     println!("{}", part_one(&lines));
-    // println!("{}", part_two(&lines));
+    println!("{}", part_two(&lines));
 }
