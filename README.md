@@ -14,7 +14,7 @@ $ python3 -m unittest day1.py
 $ cd 2022
 $ cargo run --bin day1
 $ python3 day1.py
-$ runhaskell day1.hs
+$ runhaskell day1.hs input/day1.txt
 ```
 
 ## License
